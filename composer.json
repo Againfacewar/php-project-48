@@ -1,0 +1,26 @@
+{
+    "name": "hexlet/code",
+    "description": "The second Hexlet project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hexlet\\Code\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ucsus",
+            "email": "ucsus@exbo.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "docopt/docopt": "^1.0"
+    },
+    "bin": [
+       "bin/gendiff"
+    ],
+    "scripts": {
+        "gendiff": "bin/gendiff"
+    }
+}
