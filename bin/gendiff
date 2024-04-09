@@ -26,5 +26,11 @@ DOC;
 
 $result = Docopt::handle($doc, ['version' => '1.0.0']);
 
-foreach ($result as $k=>$v)
-    echo $k.': '.json_encode($v).PHP_EOL;
+use function Hexlet\Code\Differ\genDiff;
+
+$firstFile = $result->args["<firstFile>"];
+$secondFile = $result->args["<secondFile>"];
+
+$diff = genDiff($firstFile, $secondFile);
+
+print_r($diff);
