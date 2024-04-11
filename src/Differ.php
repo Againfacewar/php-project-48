@@ -21,19 +21,7 @@ function genDiff(string $file1, string $file2): string
 
 function compareFiles(array $file1, array $file2): array
 {
-    $firstCompare = reduce_left($file1, function ($item, $key, $map, $acc) use ($file1, $file2) {
-        $item = valueToString($item);
-
-        if (array_key_exists($key, $file2)) {
-            $acc[] = $item === $file2[$key] ? ['key' => $key, 'value' => "  $key: $item"] : ['key' => $key, 'value' => "- $key: $item"];
-        } else {
-            $acc[] = ['key' => $key, 'value' => "- $key: $item"];
-        }
-
-        return $acc;
-    }, []);
-
-    $result = reduce_left($file2, function ($item, $key, $map, $acc) use ($file1, $file2) {
+    $result = reduce_left($file2, function ($item, $key, $map, $acc) use ($file1) {
         $item = valueToString($item);
 
         if (array_key_exists($key, $file1)) {
@@ -43,7 +31,17 @@ function compareFiles(array $file1, array $file2): array
         }
 
         return $acc;
-    }, $firstCompare);
+    }, reduce_left($file1, function ($item, $key, $map, $acc) use ($file2) {
+        $item = valueToString($item);
+
+        if (array_key_exists($key, $file2)) {
+            $acc[] = $item === $file2[$key] ? ['key' => $key, 'value' => "  $key: $item"] : ['key' => $key, 'value' => "- $key: $item"];
+        } else {
+            $acc[] = ['key' => $key, 'value' => "- $key: $item"];
+        }
+
+        return $acc;
+    }, []));
 
     usort($result, fn($left, $right) => strcmp($left['key'], $right['key']));
 
