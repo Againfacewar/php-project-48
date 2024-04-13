@@ -1,7 +1,9 @@
 <?php
+
 namespace Hexlet\Code\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
+
 use function Functional\map;
 use function Hexlet\Code\Differ\genDiff;
 
