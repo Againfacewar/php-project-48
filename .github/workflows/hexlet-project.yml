@@ -13,14 +13,14 @@ jobs:
         with:
           php-version: '8.2'
           extensions: xml, json, mbstring, xdebug
-      - run: make install
+        run: make install
 
       - name: tests and linter
       - run: make test
       - run: make lint
 
       - name: coverage
-      - uses: paambaati/codeclimate-action@v3.0.0
+        uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
