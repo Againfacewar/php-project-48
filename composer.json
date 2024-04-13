@@ -10,6 +10,11 @@
             "Hexlet\\Code\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Hexlet\\Code\\Tests\\": "tests"
+        }
+    },
     "authors": [
         {
             "name": "Ucsus",
@@ -28,6 +33,7 @@
         "gendiff": "bin/gendiff"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "*",
+        "phpunit/phpunit": "^11.1"
     }
 }

@@ -5,12 +5,15 @@ namespace Hexlet\Code\Differ;
 use function Functional\map;
 use function Functional\reduce_left;
 
+/**
+ * @throws \Exception
+ */
 function genDiff(string $file1, string $file2): string
 {
     $filePath1 = realpath($file1);
     $filePath2 = realpath($file2);
     if (!$filePath1 || !$filePath2) {
-        return 'Один или оба переданных файла не найдены. Убедитесь, что указанные пути корректны!' . PHP_EOL;
+        throw new \Exception('Один или оба переданных файла не найдены. Убедитесь, что указанные пути корректны!');
     }
 
     $encodedFile1 = json_decode(file_get_contents($filePath1), true);
@@ -25,7 +28,8 @@ function compareFiles(array $file1, array $file2): array
         $item = valueToString($item);
 
         if (array_key_exists($key, $file1)) {
-            $acc[] = $item === $file1[$key] ? ['key' => $key, 'value' => "  $key: $item"] : ['key' => $key, 'value' => "+ $key: $item"];
+            $acc[] = $item === $file1[$key] ? ['key' => $key, 'value' => "  $key: $item"]
+                : ['key' => $key, 'value' => "+ $key: $item"];
         } else {
             $acc[] = ['key' => $key, 'value' => "+ $key: $item"];
         }
@@ -35,7 +39,8 @@ function compareFiles(array $file1, array $file2): array
         $item = valueToString($item);
 
         if (array_key_exists($key, $file2)) {
-            $acc[] = $item === $file2[$key] ? ['key' => $key, 'value' => "  $key: $item"] : ['key' => $key, 'value' => "- $key: $item"];
+            $acc[] = $item === $file2[$key] ? ['key' => $key, 'value' => "  $key: $item"]
+                : ['key' => $key, 'value' => "- $key: $item"];
         } else {
             $acc[] = ['key' => $key, 'value' => "- $key: $item"];
         }
@@ -50,6 +55,7 @@ function compareFiles(array $file1, array $file2): array
 
 function diffToString(array $map): string
 {
+    print_r($map);
     return "{" . PHP_EOL . "  " . implode("\n  ", $map) . PHP_EOL . "}" . PHP_EOL;
 }
 
