@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,20 +14,24 @@ jobs:
         with:
           php-version: '8.2'
           extensions: xml, json, mbstring, xdebug
-      - run: make install
 
-      - name: tests
+      - name: Run install
+        run: make install
+
+      - name: Run tests
         run: make test
 
       - name: linter
         run: make lint
 
-      - name: coverage
+      - name: Run test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
           coverageCommand: make test-coverage
+          coverageLocations: build/logs/clover.xml:clover
+          debug: true
 
 
 
