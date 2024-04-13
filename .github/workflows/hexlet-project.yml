@@ -15,9 +15,11 @@ jobs:
           extensions: xml, json, mbstring, xdebug
       - run: make install
 
-      - name: tests and linter
-      - run: make test
-      - run: make lint
+      - name: tests
+        run: make test
+
+      - name: linter
+        run: make lint
 
       - name: coverage
         uses: paambaati/codeclimate-action@v3.0.0
