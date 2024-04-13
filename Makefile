@@ -7,8 +7,11 @@ validate:
 autoload:
 	composer dump-autoload
 
-gendiff:
+gendiff-json:
 	bin/gendiff --format style assets/file1.json assets/file2.json
+
+gendiff-yaml:
+	bin/gendiff --format style assets/file1.yml assets/file2.yml
 
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 src bin

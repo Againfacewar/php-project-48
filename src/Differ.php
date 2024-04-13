@@ -8,18 +8,9 @@ use function Functional\reduce_left;
 /**
  * @throws \Exception
  */
-function genDiff(string $file1, string $file2): string
+function genDiff(array $firstMap, array $secondMap): string
 {
-    $filePath1 = realpath($file1);
-    $filePath2 = realpath($file2);
-    if (!$filePath1 || !$filePath2) {
-        throw new \Exception('Один или оба переданных файла не найдены. Убедитесь, что указанные пути корректны!');
-    }
-
-    $encodedFile1 = json_decode(file_get_contents($filePath1), true);
-    $encodedFile2 = json_decode(file_get_contents($filePath2), true);
-
-    return diffToString(compareFiles($encodedFile1, $encodedFile2));
+    return diffToString(compareFiles($firstMap, $secondMap));
 }
 
 function compareFiles(array $file1, array $file2): array
@@ -55,7 +46,6 @@ function compareFiles(array $file1, array $file2): array
 
 function diffToString(array $map): string
 {
-    print_r($map);
     return "{" . PHP_EOL . "  " . implode("\n  ", $map) . PHP_EOL . "}" . PHP_EOL;
 }
 

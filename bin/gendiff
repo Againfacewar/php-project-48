@@ -26,11 +26,11 @@ DOC;
 
 $result = Docopt::handle($doc, ['version' => '1.0.0']);
 
-use function Hexlet\Code\Differ\genDiff;
+use function Hexlet\Code\Parsers\parser;
 
 $firstFile = $result->args["<firstFile>"];
 $secondFile = $result->args["<secondFile>"];
 
-$diff = genDiff($firstFile, $secondFile);
+$diff = parser($firstFile, $secondFile);
 
 print_r($diff);
