@@ -30,7 +30,10 @@ use function Hexlet\Code\Parsers\parser;
 
 $firstFile = $result->args["<firstFile>"];
 $secondFile = $result->args["<secondFile>"];
+$format = $result->args["--format"];
 
-$diff = parser($firstFile, $secondFile);
-
-print_r($diff);
+try {
+    $diff = parser($firstFile, $secondFile, $format);
+    print_r($diff);
+} catch (Exception $e) {
+}

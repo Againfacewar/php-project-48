@@ -8,7 +8,7 @@ use function Functional\reduce_left;
 /**
  * @throws \Exception
  */
-function genDiff(array $firstMap, array $secondMap): string
+function genDiff(array $firstMap, array $secondMap, string $format): string
 {
     return diffToString(compareFiles($firstMap, $secondMap));
 }

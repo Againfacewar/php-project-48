@@ -5,54 +5,36 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\Parsers\parser;
-use function Hexlet\Code\Differ\diffToString;
 class DifferTest extends TestCase
 {
     private string $jsonFile1;
     private string $jsonFile2;
     private string $yamlFile1;
     private string $yamlFile2;
-
+    private string $path = __DIR__ . "/fixtures/";
+    private string $exceptedStylish;
+    private function getRealPath($name): string
+    {
+        return $this->path . $name;
+    }
     public function setUp(): void
     {
-        $this->jsonFile1 = 'tests/fixtures/file1.json';
-        $this->jsonFile2 = 'tests/fixtures/file2.json';
-        $this->yamlFile1 = 'tests/fixtures/file1.yml';
-        $this->yamlFile2 = 'tests/fixtures/file2.yml';
+        $this->jsonFile1 = $this->getRealPath('file1.json');
+        $this->jsonFile2 = $this->getRealPath('file2.json');
+        $this->yamlFile1 = $this->getRealPath('file1.yml');
+        $this->yamlFile2 = $this->getRealPath('file2.yml');
+        $stylishData = file_get_contents($this->getRealPath('stylishExcepted.txt'));
+        $this->exceptedStylish = explode("\n\n\n", $stylishData)[0];
     }
 
     /**
      * @throws Exception
      */
-    public function testJsonFiles(): void
+
+    public function testMainFlow(): void
     {
-        $excepted = [
-            '- follow: false',
-            '  host: hexlet.io',
-            '- proxy: 123.234.53.22',
-            '- timeout: 50',
-            '+ timeout: 20',
-            '+ verbose: true',
-        ];
-
-        $this->assertEquals(diffToString($excepted), parser($this->jsonFile1, $this->jsonFile2));
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testYamlFiles(): void
-    {
-        $excepted = [
-            '- follow: false',
-            '  host: hexlet.io',
-            '- proxy: 123.234.53.22',
-            '- timeout: 50',
-            '+ timeout: 20',
-            '+ verbose: true',
-        ];
-
-        $this->assertEquals(diffToString($excepted), parser($this->yamlFile1, $this->yamlFile2));
+        $this->assertEquals($this->exceptedStylish, parser($this->jsonFile1, $this->jsonFile2, 'stylish'));
+        $this->assertEquals($this->exceptedStylish, parser($this->yamlFile1, $this->yamlFile2, 'stylish'));
     }
 
     public function testBorderlineCases(): void

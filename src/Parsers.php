@@ -10,7 +10,7 @@ use function Hexlet\Code\Differ\genDiff;
 /**
  * @throws \Exception
  */
-function parser(string $file1, string $file2): string
+function parser(string $file1, string $file2, string $format = 'stylish'): string
 {
     $filePath1 = realpath($file1);
     $filePath2 = realpath($file2);
@@ -33,5 +33,5 @@ function parser(string $file1, string $file2): string
         }
     });
 
-    return genDiff($encodedFile1, $encodedFile2);
+    return genDiff($encodedFile1, $encodedFile2, $format);
 }
