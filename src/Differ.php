@@ -8,40 +8,53 @@ use function Functional\reduce_left;
 /**
  * @throws \Exception
  */
-function genDiff(array $firstMap, array $secondMap, string $format): string
+function genDiff(array $firstMap, array $secondMap, string $format)
 {
-    return diffToString(compareFiles($firstMap, $secondMap));
+//    var_dump($firstMap);
+//    var_dump($secondMap);
+//    return diffToString(compareFiles($firstMap, $secondMap));
+    print_r(compareFiles($firstMap, $secondMap, '-'));
+    $first = compareFiles($firstMap, $secondMap, '-');
+    $second = compareFiles($secondMap, $firstMap, '+');
+    print_r(array_merge($first, $second));
+//    compareFiles($firstMap, $secondMap, '-');
 }
 
-function compareFiles(array $file1, array $file2): array
+function compareFiles(array $iterFile, array $additionalFile, $prevSymbol): array
 {
-    $result = reduce_left($file2, function ($item, $key, $map, $acc) use ($file1) {
-        $item = valueToString($item);
 
-        if (array_key_exists($key, $file1)) {
-            $acc[] = $item === $file1[$key] ? ['key' => $key, 'value' => "  $key: $item"]
-                : ['key' => $key, 'value' => "+ $key: $item"];
-        } else {
-            $acc[] = ['key' => $key, 'value' => "+ $key: $item"];
-        }
 
-        return $acc;
-    }, reduce_left($file1, function ($item, $key, $map, $acc) use ($file2) {
-        $item = valueToString($item);
 
-        if (array_key_exists($key, $file2)) {
-            $acc[] = $item === $file2[$key] ? ['key' => $key, 'value' => "  $key: $item"]
-                : ['key' => $key, 'value' => "- $key: $item"];
-        } else {
-            $acc[] = ['key' => $key, 'value' => "- $key: $item"];
-        }
+    $iter = function ($iterFile, $currentNesting) use ($additionalFile, &$iter, $prevSymbol) {
 
-        return $acc;
-    }, []));
+        return reduce_left($iterFile, function ($item, $key, $map, $acc) use ($currentNesting, $prevSymbol, $iter) {
+            $isArray = is_array($item);
+//            print_r("Первый файл\n");
+//            print_r("Ключ: $key\n");
+//            print_r($item);
+//            print_r("\n");
+//            print_r("Второй файл\n");
+//            print_r($currentNesting);
+            if (is_array($currentNesting) && array_key_exists($key, $currentNesting)) {
+                if ($isArray && is_array($currentNesting[$key])) {
+                    $currentNesting = $currentNesting[$key];
+                    $acc[$key] = $iter($item, $currentNesting);
+                } else {
+                    if ($item === $currentNesting[$key]) {
+                        $acc[$key] = $item;
+                    } else {
+                        $acc["$prevSymbol$key"] = $item;
+                    }
+                }
+            } else {
+                $acc["$prevSymbol$key"] = $item;
+            }
 
-    usort($result, fn($left, $right) => strcmp($left['key'], $right['key']));
+            return $acc;
+        }, []);
+    };
 
-    return array_unique(map($result, fn($item) => $item['value']));
+    return $iter($iterFile, $additionalFile);
 }
 
 function diffToString(array $map): string
@@ -51,10 +64,11 @@ function diffToString(array $map): string
 
 function valueToString(mixed $val): string
 {
-    $newVal = $val;
-    if (is_bool($val)) {
-        $newVal = $val ? 'true' : 'false';
-    }
-
-    return $newVal;
+    return match (true) {
+        is_string($val) => $val,
+        is_bool($val) => $val ? 'true' : 'false',
+        is_numeric($val) => $val,
+        is_null($val) => 'null',
+        default => throw new \Exception("Unsupported data type.")
+    };
 }
