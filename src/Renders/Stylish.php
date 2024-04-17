@@ -6,20 +6,20 @@ use function Functional\map;
 
 function render(array $diff): string
 {
-    $spacesCount = 2;
 
     /**
      * @throws \Exception
      */
-    $iter = function ($diff, $depth) use (&$iter, $spacesCount) {
+    $iter = function ($diff, $depth) use (&$iter) {
+        $spacesCount = 4;
 
         if (!is_array($diff)) {
             return valueToString($diff);
         }
 
         $indentSize = $depth * $spacesCount;
-        $currentIndent = str_repeat("  ", $indentSize);
-        $bracketIndent = str_repeat("  ", $indentSize - $spacesCount);
+        $currentIndent = str_repeat(" ", $indentSize - 2);
+        $bracketIndent = str_repeat(" ", $indentSize - $spacesCount);
 
         $lines = map($diff, function ($item, $key) use ($iter, $depth, $currentIndent) {
             if (!str_starts_with($key, '-') && !str_starts_with($key, '+')) {

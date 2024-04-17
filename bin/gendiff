@@ -32,6 +32,10 @@ $firstFile = $result->args["<firstFile>"];
 $secondFile = $result->args["<secondFile>"];
 $format = $result->args["--format"];
 
+if (!isset($format)) {
+    $format = 'stylish';
+}
+
 try {
     $diff = parser($firstFile, $secondFile, $format);
     print_r($diff);

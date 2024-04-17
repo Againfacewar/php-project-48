@@ -8,3 +8,5 @@
 [![asciicast](https://asciinema.org/a/tEVjAk5sE55jJYRrx4nmdNfPK.svg)](https://asciinema.org/a/tEVjAk5sE55jJYRrx4nmdNfPK)
 ### YAML
 [![asciicast](https://asciinema.org/a/0ZfdCiQexhfX3Y5j5esBvLkhc.svg)](https://asciinema.org/a/0ZfdCiQexhfX3Y5j5esBvLkhc)
+### Nested
+[![asciicast](https://asciinema.org/a/LawcZmJmYicDNNbER9P90V3HW.svg)](https://asciinema.org/a/LawcZmJmYicDNNbER9P90V3HW)

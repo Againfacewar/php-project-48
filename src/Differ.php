@@ -4,14 +4,14 @@ namespace Hexlet\Code\Differ;
 
 use function Functional\map;
 use function Functional\reduce_left;
-use function Hexlet\Code\Renders\Stylish\render;
+use function Hexlet\Code\Renders\Stylish\render as stylish;
 
 /**
  * @throws \Exception
  */
-function genDiff(array $firstMap, array $secondMap, string $format)
+function genDiff(array $firstMap, array $secondMap, string $format): string
 {
-    return render(compareFiles($firstMap, $secondMap, 1));
+    return stylish(compareFiles($firstMap, $secondMap, 1));
 }
 
 function compareFiles(array $firstFile, array $secondFile, $depth): array
