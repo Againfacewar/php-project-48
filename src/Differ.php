@@ -26,7 +26,6 @@ function compareFiles(array $firstFile, array $secondFile, $depth): array
 
         if (array_key_exists($item, $firstFile) && array_key_exists($item, $secondFile)) {
             if (is_array($firstFile[$item]) && is_array($secondFile[$item])) {
-
                 $result = compareFiles($firstFile[$item], $secondFile[$item], $depth + 1);
                 if (!empty($result)) {
                     $acc["$item"] = $result;
@@ -43,9 +42,5 @@ function compareFiles(array $firstFile, array $secondFile, $depth): array
             $acc["+ $item"] = $secondFile[$item];
         }
         return $acc;
-
     }, []);
 }
-
-
-
