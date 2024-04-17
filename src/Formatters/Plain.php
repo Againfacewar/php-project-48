@@ -1,12 +1,11 @@
 <?php
 
-namespace Hexlet\Code\Renders\Stylish;
+namespace Hexlet\Code\Formatters\Plain;
 
 use function Functional\map;
 
 function render(array $diff): string
 {
-
     /**
      * @throws \Exception
      */
