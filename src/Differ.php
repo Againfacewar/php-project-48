@@ -4,71 +4,48 @@ namespace Hexlet\Code\Differ;
 
 use function Functional\map;
 use function Functional\reduce_left;
+use function Hexlet\Code\Renders\Stylish\render;
 
 /**
  * @throws \Exception
  */
 function genDiff(array $firstMap, array $secondMap, string $format)
 {
-//    var_dump($firstMap);
-//    var_dump($secondMap);
-//    return diffToString(compareFiles($firstMap, $secondMap));
-    print_r(compareFiles($firstMap, $secondMap, '-'));
-    $first = compareFiles($firstMap, $secondMap, '-');
-    $second = compareFiles($secondMap, $firstMap, '+');
-    print_r(array_merge($first, $second));
-//    compareFiles($firstMap, $secondMap, '-');
+    return render(compareFiles($firstMap, $secondMap, 1));
 }
 
-function compareFiles(array $iterFile, array $additionalFile, $prevSymbol): array
+function compareFiles(array $firstFile, array $secondFile, $depth): array
 {
+    $keys = [...array_unique(array_merge(array_keys($firstFile), array_keys($secondFile)))];
 
+    if ($depth !== 1) {
+        sort($keys);
+    }
 
+    return reduce_left($keys, function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth) {
 
-    $iter = function ($iterFile, $currentNesting) use ($additionalFile, &$iter, $prevSymbol) {
+        if (array_key_exists($item, $firstFile) && array_key_exists($item, $secondFile)) {
+            if (is_array($firstFile[$item]) && is_array($secondFile[$item])) {
 
-        return reduce_left($iterFile, function ($item, $key, $map, $acc) use ($currentNesting, $prevSymbol, $iter) {
-            $isArray = is_array($item);
-//            print_r("Первый файл\n");
-//            print_r("Ключ: $key\n");
-//            print_r($item);
-//            print_r("\n");
-//            print_r("Второй файл\n");
-//            print_r($currentNesting);
-            if (is_array($currentNesting) && array_key_exists($key, $currentNesting)) {
-                if ($isArray && is_array($currentNesting[$key])) {
-                    $currentNesting = $currentNesting[$key];
-                    $acc[$key] = $iter($item, $currentNesting);
-                } else {
-                    if ($item === $currentNesting[$key]) {
-                        $acc[$key] = $item;
-                    } else {
-                        $acc["$prevSymbol$key"] = $item;
-                    }
+                $result = compareFiles($firstFile[$item], $secondFile[$item], $depth + 1);
+                if (!empty($result)) {
+                    $acc["$item"] = $result;
                 }
+            } elseif ($firstFile[$item] === $secondFile[$item]) {
+                $acc["$item"] = $firstFile[$item];
             } else {
-                $acc["$prevSymbol$key"] = $item;
+                $acc["- $item"] = $firstFile[$item];
+                $acc["+ $item"] = $secondFile[$item];
             }
+        } elseif (array_key_exists($item, $firstFile)) {
+            $acc["- $item"] = $firstFile[$item];
+        } elseif (array_key_exists($item, $secondFile)) {
+            $acc["+ $item"] = $secondFile[$item];
+        }
+        return $acc;
 
-            return $acc;
-        }, []);
-    };
-
-    return $iter($iterFile, $additionalFile);
+    }, []);
 }
 
-function diffToString(array $map): string
-{
-    return "{" . PHP_EOL . "  " . implode("\n  ", $map) . PHP_EOL . "}" . PHP_EOL;
-}
 
-function valueToString(mixed $val): string
-{
-    return match (true) {
-        is_string($val) => $val,
-        is_bool($val) => $val ? 'true' : 'false',
-        is_numeric($val) => $val,
-        is_null($val) => 'null',
-        default => throw new \Exception("Unsupported data type.")
-    };
-}
+

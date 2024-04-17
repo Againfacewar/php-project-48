@@ -22,15 +22,11 @@ function parser(string $file1, string $file2, string $format = 'stylish'): strin
         $ext = pathinfo($path, PATHINFO_EXTENSION);
         $encodedFile = file_get_contents($path);
 
-        switch ($ext) {
-            case 'yaml':
-            case 'yml':
-                return Yaml::parse($encodedFile);
-            case 'json':
-                return json_decode($encodedFile, true);
-            default:
-                throw new \Exception('Данный формат файла не поддерживается!');
-        }
+        return match ($ext) {
+            'yaml', 'yml' => Yaml::parse($encodedFile),
+            'json' => json_decode($encodedFile, true),
+            default => throw new \Exception('Данный формат файла не поддерживается!'),
+        };
     });
 
     return genDiff($encodedFile1, $encodedFile2, $format);
