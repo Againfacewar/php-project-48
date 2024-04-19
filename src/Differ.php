@@ -61,4 +61,3 @@ function isNested(array $map): bool
 
     return false;
 }
-
