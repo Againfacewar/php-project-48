@@ -5,7 +5,6 @@ namespace Hexlet\Code\Parsers;
 use Symfony\Component\Yaml\Yaml;
 
 use function Functional\map;
-use function Hexlet\Code\Differ\Differ\genDiff;
 
 /**
  * @throws \Exception

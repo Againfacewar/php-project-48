@@ -1,8 +1,7 @@
 <?php
 
-namespace Hexlet\Code\Differ\Differ;
+namespace Differ\Differ;
 
-use function Functional\map;
 use function Functional\reduce_left;
 use function Hexlet\Code\Formatters\selectFormatter;
 use function Hexlet\Code\Parsers\parser;
