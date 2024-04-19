@@ -1,10 +1,9 @@
 <?php
 
-namespace Hexlet\Code\Formatters;
+namespace Differ\Formatters;
 
-use function Hexlet\Code\Formatters\Stylish\render as toStylish;
-use function Hexlet\Code\Formatters\Plain\render as toPlain;
-use function Hexlet\Code\Formatters\Json\render as toJson;
+use function Differ\Formatters\Stylish\render as toStylish;
+use function Differ\Formatters\Plain\render as toPlain;
 
 /**
  * @throws \Exception

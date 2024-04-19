@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Formatters\Plain;
+namespace Differ\Formatters\Plain;
 
 use function Functional\flatten;
 use function Functional\map;

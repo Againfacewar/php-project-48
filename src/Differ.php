@@ -3,8 +3,8 @@
 namespace Differ\Differ;
 
 use function Functional\reduce_left;
-use function Hexlet\Code\Formatters\selectFormatter;
-use function Hexlet\Code\Parsers\parser;
+use function Differ\Formatters\selectFormatter;
+use function Differ\Parsers\parser;
 
 /**
  * @throws \Exception
