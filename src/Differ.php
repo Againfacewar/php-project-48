@@ -13,24 +13,26 @@ use function Hexlet\Code\Parsers\parser;
 function genDiff(string $firstPath, string $secondPath, string $format = 'stylish'): string
 {
     [$firstFile, $secondFile] = parser($firstPath, $secondPath);
-    $differ = compareFiles($firstFile, $secondFile, 1, $format);
+    $differ = compareFiles($firstFile, $secondFile, 1, isNested($firstFile));
 
     return selectFormatter($differ, $format);
 }
 
-function compareFiles(array $firstFile, array $secondFile, int $depth): array
+function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isNested): array
 {
     $keys = [...array_unique(array_merge(array_keys($firstFile), array_keys($secondFile)))];
 
-    if ($depth !== 1) {
+    if ($isNested && $depth !== 1) {
+        sort($keys);
+    } elseif (!$isNested) {
         sort($keys);
     }
 
-    return reduce_left($keys, function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth) {
+    return reduce_left($keys, function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth, $isNested) {
 
         if (array_key_exists($item, $firstFile) && array_key_exists($item, $secondFile)) {
             if (is_array($firstFile[$item]) && is_array($secondFile[$item])) {
-                $result = compareFiles($firstFile[$item], $secondFile[$item], $depth + 1);
+                $result = compareFiles($firstFile[$item], $secondFile[$item], $depth + 1, $isNested);
                 if (!empty($result)) {
                     $acc["$item"] = $result;
                 }
@@ -48,3 +50,15 @@ function compareFiles(array $firstFile, array $secondFile, int $depth): array
         return $acc;
     }, []);
 }
+
+function isNested(array $map): bool
+{
+    foreach ($map as $item) {
+        if (is_array($item)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+

@@ -15,6 +15,7 @@ class DifferTest extends TestCase
     private string $path = __DIR__ . "/fixtures/";
     private string $exceptedStylish;
     private string $exceptedPlain;
+    private string $exceptedJson;
     private function getRealPath($name): string
     {
         return $this->path . $name;
@@ -29,18 +30,36 @@ class DifferTest extends TestCase
         $this->exceptedStylish = explode("\n\n\n", $stylishData)[0];
         $plainData = file_get_contents($this->getRealPath('plainExcepted.txt'));
         $this->exceptedPlain = explode("\n\n\n", $plainData)[0];
+        $plainData = file_get_contents($this->getRealPath('jsonExcepted.txt'));
+        $this->exceptedJson = explode("\n\n\n", $plainData)[0];
     }
 
     /**
      * @throws Exception
      */
 
-    public function testMainFlow(): void
+    public function testStylishFormat(): void
     {
-        $this->assertEquals($this->exceptedStylish, genDiff($this->jsonFile1, $this->jsonFile2, 'stylish'));
-        $this->assertEquals($this->exceptedStylish, genDiff($this->yamlFile1, $this->yamlFile2, 'stylish'));
+        $this->assertEquals($this->exceptedStylish, genDiff($this->jsonFile1, $this->jsonFile2));
+        $this->assertEquals($this->exceptedStylish, genDiff($this->yamlFile1, $this->yamlFile2));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testPlainFormat(): void
+    {
         $this->assertEquals($this->exceptedPlain, genDiff($this->jsonFile1, $this->jsonFile2, 'plain'));
         $this->assertEquals($this->exceptedPlain, genDiff($this->yamlFile1, $this->yamlFile2, 'plain'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testJsonFormat(): void
+    {
+        $this->assertEquals($this->exceptedJson, genDiff($this->jsonFile1, $this->jsonFile2, 'json'));
+        $this->assertEquals($this->exceptedJson, genDiff($this->yamlFile1, $this->yamlFile2, 'json'));
     }
 
     public function testBorderlineCases(): void
