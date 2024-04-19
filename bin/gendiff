@@ -26,7 +26,7 @@ DOC;
 
 $result = Docopt::handle($doc, ['version' => '1.0.0']);
 
-use function Hexlet\Code\Differ\genDiff;
+use function Hexlet\Code\Differ\Differ\genDiff;
 
 $firstFile = $result->args["<firstFile>"];
 $secondFile = $result->args["<secondFile>"];

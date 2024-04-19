@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Differ;
+namespace Hexlet\Code\Differ\Differ;
 
 use function Functional\map;
 use function Functional\reduce_left;
