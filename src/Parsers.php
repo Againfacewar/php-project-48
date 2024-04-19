@@ -15,7 +15,8 @@ function parser(string $file1, string $file2): array
     $filePath1 = realpath($file1);
     $filePath2 = realpath($file2);
     if (!$filePath1 || !$filePath2) {
-        throw new \Exception('One or both of the transferred files were not found. Make sure that the specified paths are correct!');
+        throw new \Exception('One or both of the transferred files were not found.
+         Make sure that the specified paths are correct!');
     }
 
     [$encodedFile1, $encodedFile2] = map([$filePath1, $filePath2], function ($path) {

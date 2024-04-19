@@ -13,12 +13,12 @@ use function Hexlet\Code\Parsers\parser;
 function genDiff(string $firstPath, string $secondPath, string $format = 'stylish'): string
 {
     [$firstFile, $secondFile] = parser($firstPath, $secondPath);
-    $differ = compareFiles($firstFile, $secondFile, 1);
+    $differ = compareFiles($firstFile, $secondFile, 1, $format);
 
     return selectFormatter($differ, $format);
 }
 
-function compareFiles(array $firstFile, array $secondFile, $depth): array
+function compareFiles(array $firstFile, array $secondFile, int $depth): array
 {
     $keys = [...array_unique(array_merge(array_keys($firstFile), array_keys($secondFile)))];
 
