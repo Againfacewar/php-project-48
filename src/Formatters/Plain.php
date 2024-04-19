@@ -14,8 +14,9 @@ function render(array $diff): string
     $iter = function ($diff, $path = '') use (&$iter) {
 
         return reduce_left($diff, function ($item, $key, $map, $acc) use ($iter, $path) {
+            $keyWithoutPrefix = removePrefix($key);
             $path = str_starts_with($key, "-") || str_starts_with($key, "+")
-                ? "$path." . removePrefix($key) : "$path.$key";
+                ? "$path.$keyWithoutPrefix" : "$path.$key";
 
             if (str_starts_with($key, "-") || str_starts_with($key, "+")) {
                 if (str_starts_with($key, "-") && array_key_exists(revertKey($key), $map)) {
@@ -55,19 +56,22 @@ function valueToString(mixed $val): string
 
 function revertKey(string $key): string
 {
+    $cleanPath = removePrefix($key);
+
     return match (true) {
-        str_starts_with($key, '-') => "+ " . removePrefix($key),
-        str_starts_with($key, '+') => "- " . removePrefix($key),
+        str_starts_with($key, '-') => "+ $cleanPath",
+        str_starts_with($key, '+') => "- $cleanPath",
         default => throw new \Exception('Unexpected match value'),
     };
 }
 
 function buildDifferString(string $type, string $value1, string $path, string $value2 = ''): string
 {
+    $pathWithoutDot = substr($path, 1);
     return match ($type) {
-        'update' => "Property '" . substr($path, 1) . "' was updated. From $value1 to $value2",
-        'remove' => "Property '" . substr($path, 1) . "' was removed",
-        'add' => "Property '" . substr($path, 1) . "' was added with value: $value1",
+        'update' => "Property '$pathWithoutDot' was updated. From $value1 to $value2",
+        'remove' => "Property '$pathWithoutDot' was removed",
+        'add' => "Property '$pathWithoutDot' was added with value: $value1",
     };
 }
 

@@ -53,11 +53,7 @@ function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isN
 
 function isNested(array $map): bool
 {
-    foreach ($map as $item) {
-        if (is_array($item)) {
-            return true;
-        }
-    }
+    $containsArray = array_filter($map, 'is_array');
 
-    return false;
+    return count($containsArray) > 0;
 }
