@@ -20,7 +20,6 @@ function genDiff(string $firstPath, string $secondPath, string $format = 'stylis
 function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isNested): array
 {
     $keys = [...array_unique(array_merge(array_keys($firstFile), array_keys($secondFile)))];
-
     if ($isNested && $depth !== 1) {
         sort($keys);
     } elseif (!$isNested) {

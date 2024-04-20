@@ -38,7 +38,7 @@ function render(array $diff): string
 function valueToString(mixed $val): string
 {
     return match (true) {
-        is_string($val), is_numeric($val) => (string) $val,
+        is_string($val), is_numeric($val) => $val,
         is_bool($val) => $val ? 'true' : 'false',
         is_null($val) => 'null',
         default => throw new \Exception("Unsupported data type.")
@@ -66,15 +66,29 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
 
     $key = getKey($node);
     return match (getType($node)) {
-        'unchanged' => "$currentIndent  $key: {$stringify($node['value'], $depth + 1)}",
+        'unchanged' => sprintf(
+            "%s  %s: %s",
+            $currentIndent, $key, $stringify($node['value'], $depth + 1)
+        ),
         'updated' => sprintf(
             "%s- %s: %s\n%s+ %s: %s",
             $currentIndent, $key, $stringify(getValue($node)['first'], $depth + 1),
             $currentIndent, $key, $stringify(getValue($node)['second'], $depth + 1)
         ),
-        'removed' => "$currentIndent- $key: {$stringify($node['value'], $depth + 1)}",
-        'added' => "$currentIndent+ $key: {$stringify($node['value'], $depth + 1)}",
-        'internal' => "$currentIndent  $key: {$fn(getChildren($node), $depth + 1)}"
+        'removed' => sprintf(
+            "%s- %s: %s",
+            $currentIndent, $key, $stringify($node['value'], $depth + 1)
+        ),
+        'added' => sprintf(
+            "%s+ %s: %s",
+            $currentIndent, $key, $stringify($node['value'], $depth + 1)
+        ),
+        'internal' => sprintf(
+            "%s  %s: %s",
+            $currentIndent,
+            $key,
+            $fn(getChildren($node), $depth + 1)
+        )
     };
 }
 
