@@ -1,4 +1,5 @@
 <?php
+
 namespace Hexlet\Code\Tests;
 
 use Exception;

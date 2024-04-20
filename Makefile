@@ -19,10 +19,10 @@ gendiff-json:
 	bin/gendiff --format json assets/file1.json assets/file2.json
 
 lint:
-	composer exec --verbose phpcs -- --standard=PSR12 src bin
+	composer exec --verbose phpcs -- --standard=PSR12 src bin tests
 
 fix-lint:
-	composer exec --verbose phpcbf -- --standard=PSR12 src bin
+	composer exec --verbose phpcbf -- --standard=PSR12 src bin tests
 
 test:
 	composer exec --verbose phpunit tests
