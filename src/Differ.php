@@ -5,6 +5,7 @@ namespace Differ\Differ;
 use function Functional\reduce_left;
 use function Differ\Formatters\selectFormatter;
 use function Differ\Parsers\parser;
+use function Functional\sort;
 
 /**
  * @throws \Exception
@@ -20,13 +21,9 @@ function genDiff(string $firstPath, string $secondPath, string $format = 'stylis
 function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isNested): array
 {
     $keys = [...array_unique(array_merge(array_keys($firstFile), array_keys($secondFile)))];
-    if ($isNested && $depth !== 1) {
-        sort($keys);
-    } elseif (!$isNested) {
-        sort($keys);
-    }
+    $sortedKeys = sort($keys, fn($left, $right) => strcmp($left, $right));
 
-    return reduce_left($keys, function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth, $isNested) {
+    return reduce_left($sortedKeys, function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth, $isNested) {
 
         if (array_key_exists($item, $firstFile) && array_key_exists($item, $secondFile)) {
             if (is_array($firstFile[$item]) && is_array($secondFile[$item])) {
