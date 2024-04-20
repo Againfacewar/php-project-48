@@ -26,7 +26,7 @@ function render(array $diff): string
             return buildDifferString($item, $depth, $currentIndent, $iter);
         });
 
-        return implode("\n", ['{', ...$lines, "{$bracketIndent}}"]);
+        return concatLines($lines, $bracketIndent);
     };
 
     return $iter($diff, 1);
@@ -61,7 +61,7 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
             return "$currentIndent  $key: {$stringify($item, $depth + 1)}";
         });
 
-        return implode("\n", ['{', ...$lines, "{$bracketIndent}}"]);
+        return concatLines($lines, $bracketIndent);
     };
 
     $key = getKey($node);
@@ -76,4 +76,9 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
         'added' => "$currentIndent+ $key: {$stringify($node['value'], $depth + 1)}",
         'internal' => "$currentIndent  $key: {$fn(getChildren($node), $depth + 1)}"
     };
+}
+
+function concatLines(array $lines, string $bracketOffset): string
+{
+    return implode("\n", ['{', ...$lines, "{$bracketOffset}}"]);
 }
