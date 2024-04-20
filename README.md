@@ -45,4 +45,4 @@ bin/gendiff -h
 ### Plain
 [![asciicast](https://asciinema.org/a/uT3Po3AUQV1o9t3WOJvoe1qcc.svg)](https://asciinema.org/a/uT3Po3AUQV1o9t3WOJvoe1qcc)
 ### Json
-[![asciicast](https://asciinema.org/a/EnJhvkIcGFN30wvyNsyerGw8w.svg)](https://asciinema.org/a/EnJhvkIcGFN30wvyNsyerGw8w)
+[![asciicast](https://asciinema.org/a/37sMqrNEH7m6urWuEYKJfdgQl.svg)](https://asciinema.org/a/37sMqrNEH7m6urWuEYKJfdgQl)

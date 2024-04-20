@@ -25,7 +25,7 @@ function parser(string $file1, string $file2): array
         return match ($ext) {
             'yaml', 'yml' => Yaml::parse((string) $encodedFile),
             'json' => json_decode((string) $encodedFile, true),
-            default => throw new \Exception('Данный формат файла не поддерживается!'),
+            default => throw new \Exception("Unsupported format"),
         };
     });
 
