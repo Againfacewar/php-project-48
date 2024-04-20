@@ -13,7 +13,7 @@ function selectFormatter(array $diff, string $format): string
     return match ($format) {
         "stylish" => toStylish($diff),
         "plain" => toPlain($diff),
-        "json" => json_encode($diff, JSON_PRETTY_PRINT),
+        "json" =>  json_encode($diff, JSON_THROW_ON_ERROR),
         default => throw new \Exception("Unsupported format"),
     };
 }
