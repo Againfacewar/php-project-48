@@ -32,7 +32,6 @@ function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isN
                     $acc[] =
                     ['type' => 'internal', "key" => $item,
                         'children' => compareFiles($firstFile[$item], $secondFile[$item], $depth + 1, $isNested)] ;
-
                 } elseif ($firstFile[$item] === $secondFile[$item]) {
                     $acc[] = ['type' => 'unchanged', 'key' => $item, 'value' => $firstFile[$item]];
                 } else {
