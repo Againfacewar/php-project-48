@@ -13,7 +13,7 @@ function parser(string $file1, string $file2): array
 {
     $filePath1 = realpath($file1);
     $filePath2 = realpath($file2);
-    if (!file_exists($filePath1) || !file_exists($filePath2)) {
+    if (!file_exists((string) $filePath1) || !file_exists((string) $filePath2)) {
         throw new \Exception('One or both of the transferred files were not found.
          Make sure that the specified paths are correct!');
     }
