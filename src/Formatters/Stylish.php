@@ -41,6 +41,7 @@ function valueToString(mixed $val): string
         is_string($val), is_numeric($val) => $val,
         is_bool($val) => $val ? 'true' : 'false',
         is_null($val) => 'null',
+        is_array($val) => '[complex value]',
         default => throw new \Exception("Unsupported data type.")
     };
 }
@@ -54,9 +55,7 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
         if (!is_array($value)) {
             return valueToString($value);
         }
-
         [$currentIndent, $bracketIndent] = calculateOffset($depth);
-
         $lines = map($value, function ($item, $key) use ($stringify, $depth, $currentIndent) {
             return "$currentIndent  $key: {$stringify($item, $depth + 1)}";
         });
