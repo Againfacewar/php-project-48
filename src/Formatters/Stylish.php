@@ -38,7 +38,7 @@ function render(array $diff): string
 function valueToString(mixed $val): string
 {
     return match (true) {
-        is_string($val), is_numeric($val) => $val,
+        is_string($val), is_numeric($val) => (string) $val,
         is_bool($val) => $val ? 'true' : 'false',
         is_null($val) => 'null',
         is_array($val) => '[complex value]',
