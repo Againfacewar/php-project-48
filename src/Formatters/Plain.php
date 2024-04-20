@@ -17,10 +17,10 @@ function render(array $diff): string
 
         return reduce_left($diff, function ($item, $key, $map, $acc) use ($iter, $path) {
             if (getType($item) !== 'unchanged') {
-                $acc[] = buildDifferString($item, $path, $iter);
+                $newEntry = buildDifferString($item, $path, $iter);
             }
 
-            return $acc;
+            return isset($newEntry) ? array_merge($acc, [$newEntry]) : $acc;
         }, []);
     };
     $result = flatten($iter($diff));
@@ -30,7 +30,7 @@ function render(array $diff): string
 /**
  * @throws \Exception
  */
-function valueToString($val): string
+function valueToString(mixed $val): string
 {
     return match (true) {
         is_numeric($val), is_string($val), is_bool($val) => var_export($val, true),
@@ -55,5 +55,6 @@ function buildDifferString(array $node, string $path, callable $fn): mixed
         'removed' => sprintf("Property '%s' was removed", $newPath),
         'added' => sprintf("Property '%s' was added with value: %s", $newPath, valueToString(getValue($node))),
         'internal' => $fn(getChildren($node), $nestedPath),
+        default => throw new \Exception("Unsupported type"),
     };
 }

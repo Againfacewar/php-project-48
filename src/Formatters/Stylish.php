@@ -46,6 +46,9 @@ function valueToString(mixed $val): string
     };
 }
 
+/**
+ * @throws \Exception
+ */
 function buildDifferString(mixed $node, int $depth, string $currentIndent, callable $fn): string
 {
     /**
@@ -87,7 +90,8 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
             $currentIndent,
             $key,
             $fn(getChildren($node), $depth + 1)
-        )
+        ),
+        default => throw new \Exception("Unsupported type")
     };
 }
 
