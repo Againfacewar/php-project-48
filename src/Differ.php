@@ -29,20 +29,23 @@ function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isN
 
             if (array_key_exists($item, $firstFile) && array_key_exists($item, $secondFile)) {
                 if (is_array($firstFile[$item]) && is_array($secondFile[$item])) {
-                    return ['type' => 'internal', "key" => $item,
+                    $acc[] =
+                    ['type' => 'internal', "key" => $item,
                         'children' => compareFiles($firstFile[$item], $secondFile[$item], $depth + 1, $isNested)] ;
 
                 } elseif ($firstFile[$item] === $secondFile[$item]) {
-                    return ['type' => 'unchanged', 'key' => $item, 'value' => $firstFile[$item]];
+                    $acc[] = ['type' => 'unchanged', 'key' => $item, 'value' => $firstFile[$item]];
                 } else {
-                    return ['type' => 'updated', 'key' => $item,
+                    $acc[] =
+                    ['type' => 'updated', 'key' => $item,
                         'value' => ['first' => $firstFile[$item], 'second' => $secondFile[$item]]];
                 }
             } elseif (array_key_exists($item, $firstFile)) {
-                return ['type' => 'removed', 'key' => $item, 'value' => $firstFile[$item]];
+                $acc[] = ['type' => 'removed', 'key' => $item, 'value' => $firstFile[$item]];
             } elseif (array_key_exists($item, $secondFile)) {
-                return ['type' => 'added', 'key' => $item, 'value' => $secondFile[$item]];
+                $acc[] = ['type' => 'added', 'key' => $item, 'value' => $secondFile[$item]];
             }
+            return $acc;
         },
         []
     );
