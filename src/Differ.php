@@ -23,8 +23,8 @@ function genDiff(string $firstPath, string $secondPath, string $format = 'stylis
     $firstFileExt = pathinfo((string) $filePath1, PATHINFO_EXTENSION);
     $secondFile = file_get_contents((string) $filePath2);
     $secondFileExt = pathinfo((string) $filePath1, PATHINFO_EXTENSION);
-    $encodedFirstFile = parser((string) $firstFile, (string) $firstFileExt);
-    $encodedSecondFile = parser($secondFile, (string) $secondFileExt);
+    $encodedFirstFile = parser($firstFile, $firstFileExt);
+    $encodedSecondFile = parser($secondFile, $secondFileExt);
     $differ = compareFiles($encodedFirstFile, $encodedSecondFile, 1, isNested($encodedFirstFile));
 
     return selectFormatter($differ, $format);
