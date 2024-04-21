@@ -12,8 +12,20 @@ use function Functional\sort;
  */
 function genDiff(string $firstPath, string $secondPath, string $format = 'stylish'): string
 {
-    [$firstFile, $secondFile] = parser($firstPath, $secondPath);
-    $differ = compareFiles($firstFile, $secondFile, 1, isNested($firstFile));
+    $filePath1 = realpath($firstPath);
+    $filePath2 = realpath($secondPath);
+    if (!file_exists((string) $filePath1) || !file_exists((string) $filePath2)) {
+        throw new \Exception('One or both of the transferred files were not found.
+         Make sure that the specified paths are correct!');
+    }
+
+    $firstFile = file_get_contents($filePath1);
+    $firstFileExt = pathinfo($filePath1, PATHINFO_EXTENSION);
+    $secondFile = file_get_contents($filePath2);
+    $secondFileExt = pathinfo($filePath1, PATHINFO_EXTENSION);
+    $encodedFirstFile = parser($firstFile, $firstFileExt);
+    $encodedSecondFile = parser($secondFile, $secondFileExt);
+    $differ = compareFiles($encodedFirstFile, $encodedSecondFile, 1, isNested($encodedFirstFile));
 
     return selectFormatter($differ, $format);
 }
