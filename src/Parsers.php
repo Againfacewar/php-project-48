@@ -14,6 +14,6 @@ function parse(mixed $file, string $ext): array
     return match ($ext) {
         'yaml', 'yml' => Yaml::parse($file),
         'json' => json_decode($file, true),
-        default => throw new \Exception("Unsupported format"),
+        default => throw new \Exception("Unsupported file format: $ext"),
     };
 }

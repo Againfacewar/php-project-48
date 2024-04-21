@@ -14,6 +14,6 @@ function selectFormatter(array $diff, string $format): string
         "stylish" => toStylish($diff),
         "plain" => toPlain($diff),
         "json" =>  json_encode($diff, JSON_THROW_ON_ERROR),
-        default => throw new \Exception("Unsupported format"),
+        default => throw new \Exception("Unsupported format: {$format}"),
     };
 }

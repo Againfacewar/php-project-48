@@ -36,7 +36,7 @@ function valueToString(mixed $val): string
         is_numeric($val), is_string($val), is_bool($val) => var_export($val, true),
         is_null($val) => 'null',
         is_array($val) => '[complex value]',
-        default => throw new \Exception("Unsupported data type.")
+        default => throw new \Exception("Unsupported data type: $val")
     };
 }
 /**
@@ -46,8 +46,8 @@ function buildDifferString(array $node, string $path, callable $fn): mixed
 {
     $nestedPath = "{$path}{$node['key']}.";
     $newPath = "{$path}{$node['key']}";
-
-    return match (getType($node)) {
+    $type = getType($node);
+    return match ($type) {
         'updated' => sprintf(
             "Property '%s' was updated. From %s to %s",
             $newPath, valueToString(getValue($node)['first']), valueToString(getValue($node)['second'])
@@ -55,6 +55,6 @@ function buildDifferString(array $node, string $path, callable $fn): mixed
         'removed' => sprintf("Property '%s' was removed", $newPath),
         'added' => sprintf("Property '%s' was added with value: %s", $newPath, valueToString(getValue($node))),
         'internal' => $fn(getChildren($node), $nestedPath),
-        default => throw new \Exception("Unsupported type"),
+        default => throw new \Exception("Unsupported node type: $type"),
     };
 }

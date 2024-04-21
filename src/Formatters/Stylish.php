@@ -42,7 +42,7 @@ function valueToString(mixed $val): string
         is_bool($val) => $val ? 'true' : 'false',
         is_null($val) => 'null',
         is_array($val) => '[complex value]',
-        default => throw new \Exception("Unsupported data type.")
+        default => throw new \Exception("Unsupported data type: $val")
     };
 }
 
@@ -67,7 +67,8 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
     };
 
     $key = getKey($node);
-    return match (getType($node)) {
+    $type = getType($node);
+    return match ($type) {
         'unchanged' => sprintf(
             "%s  %s: %s",
             $currentIndent, $key, $stringify($node['value'], $depth + 1)
@@ -91,7 +92,7 @@ function buildDifferString(mixed $node, int $depth, string $currentIndent, calla
             $key,
             $fn(getChildren($node), $depth + 1)
         ),
-        default => throw new \Exception("Unsupported type")
+        default => throw new \Exception("Unsupported node type: $type")
     };
 }
 
