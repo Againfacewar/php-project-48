@@ -25,25 +25,25 @@ function genDiff(string $firstPath, string $secondPath, string $format = 'stylis
     $secondFileExt = pathinfo((string) $filePath1, PATHINFO_EXTENSION);
     $encodedFirstFile = parser($firstFile, $firstFileExt);
     $encodedSecondFile = parser($secondFile, $secondFileExt);
-    $differ = compareFiles($encodedFirstFile, $encodedSecondFile, 1, isNested($encodedFirstFile));
+    $differ = compareFiles($encodedFirstFile, $encodedSecondFile, 1);
 
     return selectFormatter($differ, $format);
 }
 
-function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isNested): array
+function compareFiles(array $firstFile, array $secondFile, int $depth): array
 {
     $keys = [...array_unique(array_merge(array_keys($firstFile), array_keys($secondFile)))];
     $sortedKeys = sort($keys, fn($left, $right) => strcmp($left, $right));
 
     return reduce_left(
         $sortedKeys,
-        function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth, $isNested) {
+        function ($item, $key, $map, $acc) use ($firstFile, $secondFile, $depth) {
 
             if (array_key_exists($item, $firstFile) && array_key_exists($item, $secondFile)) {
                 if (is_array($firstFile[$item]) && is_array($secondFile[$item])) {
                     $newEntry =
                     ['type' => 'internal', "key" => $item,
-                        'children' => compareFiles($firstFile[$item], $secondFile[$item], $depth + 1, $isNested)] ;
+                        'children' => compareFiles($firstFile[$item], $secondFile[$item], $depth + 1)] ;
                 } elseif ($firstFile[$item] === $secondFile[$item]) {
                     $newEntry = ['type' => 'unchanged', 'key' => $item, 'value' => $firstFile[$item]];
                 } else {
@@ -60,11 +60,4 @@ function compareFiles(array $firstFile, array $secondFile, int $depth, bool $isN
         },
         []
     );
-}
-
-function isNested(array $map): bool
-{
-    $containsArray = array_filter($map, 'is_array');
-
-    return count($containsArray) > 0;
 }
