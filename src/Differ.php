@@ -4,7 +4,7 @@ namespace Differ\Differ;
 
 use function Functional\reduce_left;
 use function Differ\Formatters\selectFormatter;
-use function Differ\Parsers\parser;
+use function Differ\Parsers\parse;
 use function Functional\sort;
 
 /**
@@ -23,8 +23,8 @@ function genDiff(string $firstPath, string $secondPath, string $format = 'stylis
     $firstFileExt = pathinfo((string) $filePath1, PATHINFO_EXTENSION);
     $secondFile = file_get_contents((string) $filePath2);
     $secondFileExt = pathinfo((string) $filePath1, PATHINFO_EXTENSION);
-    $encodedFirstFile = parser($firstFile, $firstFileExt);
-    $encodedSecondFile = parser($secondFile, $secondFileExt);
+    $encodedFirstFile = parse($firstFile, $firstFileExt);
+    $encodedSecondFile = parse($secondFile, $secondFileExt);
     $differ = compareFiles($encodedFirstFile, $encodedSecondFile, 1);
 
     return selectFormatter($differ, $format);

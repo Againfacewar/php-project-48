@@ -9,7 +9,7 @@ use function Functional\map;
 /**
  * @throws \Exception
  */
-function parser(mixed $file, string $ext): array
+function parse(mixed $file, string $ext): array
 {
     return match ($ext) {
         'yaml', 'yml' => Yaml::parse($file),
