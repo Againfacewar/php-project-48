@@ -9,11 +9,11 @@ use function Functional\map;
 /**
  * @throws \Exception
  */
-function parser(string $file, string $ext): array
+function parser(mixed $file, string $ext): array
 {
     return match ($ext) {
-        'yaml', 'yml' => Yaml::parse((string) $file),
-        'json' => json_decode((string) $file, true),
+        'yaml', 'yml' => Yaml::parse($file),
+        'json' => json_decode($file, true),
         default => throw new \Exception("Unsupported format"),
     };
 }
