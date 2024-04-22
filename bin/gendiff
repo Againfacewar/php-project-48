@@ -40,4 +40,5 @@ try {
     $diff = genDiff($firstFile, $secondFile, $format);
     print_r($diff);
 } catch (Exception $e) {
+    print_r($e->getMessage());
 }
